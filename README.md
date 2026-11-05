@@ -1,104 +1,102 @@
 # OWASP Juice Shop Security Lab
 
+A locally hosted cybersecurity practice environment using OWASP Juice Shop, Docker Desktop and Windows.
+
 ## 1. Project Overview
 
-This project documents the setup of a local cybersecurity practice lab using OWASP Juice Shop and Docker Desktop.
+This project demonstrates the setup of a controlled local web application security testing lab. It documents the deployment, network configuration, access restrictions and ethical testing boundaries.
 
-The objective is to build a controlled environment for learning web application security testing, documenting network configuration, and following ethical testing guidelines.
+The target is OWASP Juice Shop, an intentionally vulnerable web application designed for security education.
 
-## 2. Lab Objectives
+## 2. Objectives
 
 - Deploy OWASP Juice Shop locally using Docker.
-- Configure and verify restricted network access.
-- Document the lab network topology.
+- Restrict the published application port to localhost.
+- Verify that the application is not reachable through the host's LAN address.
+- Document the network topology.
 - Define Rules of Engagement (RoE).
-- Prepare a repeatable baseline for future security testing.
+- Establish a safe environment for future authorized security testing.
 
 ## 3. Tools and Technologies
 
 - OWASP Juice Shop
 - Docker Desktop
-- Windows
+- Windows PowerShell
+- WSL 2
 - Google Chrome
 - GitHub
 
-## 4. Target Details
+## 4. Target Configuration
 
-| Item | Configuration |
-|---|---|
-| Target | OWASP Juice Shop |
-| Deployment | Docker container |
-| Container name | juice-shop |
-| Application port | 3000 |
-| Local URL | http://127.0.0.1:3000/#/ |
-| Host binding | 127.0.0.1:3000 |
+| Item                  | Configuration              |
+| --------------------- | -------------------------- |
+| Application           | OWASP Juice Shop           |
+| Container             | `juice-shop`               |
+| Docker network        | `bridge`                   |
+| Container IP observed | `172.17.0.2`               |
+| Application port      | `3000`                     |
+| Host binding          | `127.0.0.1:3000`           |
+| Local application URL | `http://127.0.0.1:3000/#/` |
 
-## 5. Setup and Verification
+## 5. Deployment
 
-The Juice Shop Docker image was downloaded and the container was started successfully.
-
-Command used:
+The Juice Shop image was downloaded and deployed using Docker.
 
 ```powershell
 docker run -d --name juice-shop -p 127.0.0.1:3000:3000 bkimminich/juice-shop
 ```
 
+The application was successfully accessed through a browser on the host computer.
+
+## 6. Network Access Restriction
+
+The Docker port is explicitly bound to the loopback address `127.0.0.1`, rather than all host network interfaces.
+
+This restricts access through the published application port to the local computer.
+
 Verification performed:
 
-```powershell
-docker port juice-shop
-Test-NetConnection 127.0.0.1 -Port 3000
-```
+- Confirmed the Docker port binding using `docker port juice-shop`.
+- Confirmed local connectivity using `Test-NetConnection 127.0.0.1 -Port 3000`.
+- Tested the host's LAN address on port 3000; the TCP connection failed.
+- Tested from a separate phone connected to the same Wi-Fi; the application could not be reached.
 
-The application was successfully accessed through the local browser.
+**Scope of this protection:** These tests verify that the published Juice Shop web port is not reachable through the host's LAN address. They do not establish that every possible network path to the container is blocked.
 
-## 6. Network Isolation Status
-
-The application port is currently bound to the localhost interface (127.0.0.1), restricting direct access through the host's LAN interfaces.
-
-**Important:** Outbound internet access from the Docker container has not yet been blocked or verified. Full network isolation is still in progress.
+Outbound internet access from the main Juice Shop container has not been blocked or verified. This is not claimed as part of the completed isolation configuration.
 
 ## 7. Rules of Engagement
 
-Testing will be restricted to the locally deployed OWASP Juice Shop instance owned and controlled by the project author.
+All testing is restricted to the locally deployed OWASP Juice Shop instance.
 
-### Allowed Activities
-- Local application exploration.
-- Passive inspection of application responses.
-- Authorized web security testing against the local target.
-- Documentation of observations and findings.
+The approved scope, permitted activities, exclusions and stop conditions are documented in:
 
-### Exclusions
-- Public websites and third-party systems.
-- Other devices and networks.
-- Denial-of-service testing.
-- Destructive activities or unauthorized data access.
-- Testing outside the defined local target.
+- `docs/rules-of-engagement.md`
 
-### Stop Conditions
-- Unexpected access to external systems.
-- Any impact on systems outside the lab.
-- Unexpected service disruption.
-- Loss of control over the testing environment.
+## 8. Network Topology
 
-Testing must stop immediately if any of these conditions occur.
+The actual Docker configuration and network access path are documented in:
 
-## 8. Project Status
+- `docs/network-topology.md`
 
-- [x] Local OWASP Juice Shop deployment.
-- [x] Local browser access verified.
-- [x] Localhost port binding verified.
-- [ ] Outbound network isolation.
-- [ ] Network topology documentation.
-- [ ] Complete Rules of Engagement verification.
-- [ ] Baseline snapshot.
-- [ ] Final submission review.
+## 9. Evidence and Verification
 
-## 9. Safety Notice
+Commands and observed results supporting the configuration are documented in:
 
-This environment is intended strictly for authorized cybersecurity education and practice. All testing must remain within the defined local lab scope.
+- `docs/evidence.md`
 
----
+## 10. Project Status
 
-**Project:** OWASP Juice Shop Security Lab  
-**Purpose:** Ethical Hacking Practice and Network Isolation Documentation
+- [x] Local Juice Shop deployment
+- [x] Browser access verified
+- [x] Localhost port binding verified
+- [x] Host LAN access test performed
+- [x] Same-Wi-Fi phone access test performed
+- [x] Rules of Engagement defined
+- [x] Network topology documented
+- [ ] Optional baseline snapshot
+- [ ] Further authorized security testing and findings
+
+## 11. Safety Notice
+
+This lab is intended strictly for authorized cybersecurity education and practice. Testing must remain within the defined scope. No public websites, third-party systems or unrelated devices are authorized targets.
