@@ -86,8 +86,8 @@ Commands, observations and verification results are documented in [Evidence](doc
 - [x] Rules of Engagement documented
 - [x] Network topology documented
 - [x] Evidence and verification documented
-- [ ] Optional baseline snapshot
-- [ ] Further authorized security testing and findings
+- [x] Baseline snapshot documented
+- [x] Evidence screenshots uploaded
 
 ## 10. Safety Notice
 
